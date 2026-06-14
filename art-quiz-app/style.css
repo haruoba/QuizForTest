@@ -182,6 +182,10 @@ h3 {
   text-align: center;
 }
 
+.image-fallback[hidden] {
+  display: none;
+}
+
 .answer-form {
   display: grid;
   gap: 16px;
