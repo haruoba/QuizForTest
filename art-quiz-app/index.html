@@ -19,7 +19,10 @@
           </p>
         </div>
         <div class="hero-actions">
-          <button id="start-button" class="primary-button" type="button">スタート</button>
+          <button id="start-button" class="primary-button" type="button">4択クイズ</button>
+          <button class="secondary-button typing-start-button" type="button" data-field="artist">人名のみ</button>
+          <button class="secondary-button typing-start-button" type="button" data-field="title">タイトルのみ</button>
+          <button class="secondary-button typing-start-button" type="button" data-field="country">国名のみ</button>
           <button id="show-list-button" class="secondary-button" type="button">問題一覧を見る</button>
         </div>
       </div>
@@ -72,6 +75,34 @@
         </fieldset>
 
         <p id="warning-message" class="warning-message" role="alert" aria-live="polite"></p>
+        <button class="primary-button submit-button" type="submit">回答する</button>
+      </form>
+    </section>
+
+    <section id="typing-screen" class="screen" aria-labelledby="typing-question-heading">
+      <div class="quiz-header">
+        <div>
+          <p id="typing-mode-label" class="eyebrow">Typing</p>
+          <h2 id="typing-question-heading">問題 <span id="typing-question-number">1</span></h2>
+        </div>
+        <p id="typing-score-progress" class="score-progress">全18問</p>
+      </div>
+
+      <div class="artwork-panel">
+        <div class="image-frame">
+          <img id="typing-artwork-image" alt="作品画像" decoding="async">
+          <div id="typing-image-fallback" class="image-fallback" hidden>
+            画像を読み込めませんでした
+          </div>
+        </div>
+      </div>
+
+      <form id="typing-answer-form" class="answer-form">
+        <label class="typing-group" for="typing-answer-input">
+          <span id="typing-answer-label">答えを入力</span>
+          <input id="typing-answer-input" class="typing-input" type="text" autocomplete="off">
+        </label>
+        <p id="typing-warning-message" class="warning-message" role="alert" aria-live="polite"></p>
         <button class="primary-button submit-button" type="submit">回答する</button>
       </form>
     </section>

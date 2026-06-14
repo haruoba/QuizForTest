@@ -137,19 +137,30 @@ const screens = {
   start: document.getElementById("start-screen"),
   list: document.getElementById("list-screen"),
   quiz: document.getElementById("quiz-screen"),
+  typing: document.getElementById("typing-screen"),
   result: document.getElementById("result-screen")
 };
 
 const startButton = document.getElementById("start-button");
+const typingStartButtons = document.querySelectorAll(".typing-start-button");
 const showListButton = document.getElementById("show-list-button");
 const backToStartButton = document.getElementById("back-to-start-button");
 const retryButton = document.getElementById("retry-button");
 const answerForm = document.getElementById("answer-form");
+const typingAnswerForm = document.getElementById("typing-answer-form");
 const questionNumber = document.getElementById("question-number");
 const scoreProgress = document.getElementById("score-progress");
 const artworkImage = document.getElementById("artwork-image");
 const imageFallback = document.getElementById("image-fallback");
+const typingModeLabel = document.getElementById("typing-mode-label");
+const typingQuestionNumber = document.getElementById("typing-question-number");
+const typingScoreProgress = document.getElementById("typing-score-progress");
+const typingArtworkImage = document.getElementById("typing-artwork-image");
+const typingImageFallback = document.getElementById("typing-image-fallback");
+const typingAnswerLabel = document.getElementById("typing-answer-label");
+const typingAnswerInput = document.getElementById("typing-answer-input");
 const warningMessage = document.getElementById("warning-message");
+const typingWarningMessage = document.getElementById("typing-warning-message");
 const totalScore = document.getElementById("total-score");
 const accuracyRate = document.getElementById("accuracy-rate");
 const resultList = document.getElementById("result-list");
@@ -160,6 +171,23 @@ const imageVersion = "20260614-jpeg";
 let quizQuestions = [];
 let currentIndex = 0;
 let answers = [];
+let currentQuizType = "choice";
+let currentTypingField = "";
+
+const typingModes = {
+  artist: {
+    label: "人名のみ",
+    prompt: "作者名を入力"
+  },
+  title: {
+    label: "タイトルのみ",
+    prompt: "作品名を入力"
+  },
+  country: {
+    label: "国名のみ",
+    prompt: "国名を入力"
+  }
+};
 
 function shuffle(items) {
   const copied = [...items];
@@ -178,6 +206,14 @@ function showScreen(screenName) {
 function getImageSrc(imagePath) {
   const cacheBuster = window.location.protocol.startsWith("http") ? `?v=${imageVersion}` : "";
   return `${imagePath}${cacheBuster}`;
+}
+
+function normalizeAnswer(value) {
+  return value
+    .normalize("NFKC")
+    .replace(/\s+/g, "")
+    .trim()
+    .toLowerCase();
 }
 
 function buildOptions(type, correctAnswer) {
@@ -228,6 +264,24 @@ function renderQuestion() {
   renderChoices("country-options", "country", buildOptions("country", question.country));
 }
 
+function renderTypingQuestion() {
+  const question = quizQuestions[currentIndex];
+  const mode = typingModes[currentTypingField];
+
+  typingWarningMessage.textContent = "";
+  typingAnswerForm.reset();
+  typingModeLabel.textContent = mode.label;
+  typingAnswerLabel.textContent = mode.prompt;
+  typingAnswerInput.placeholder = mode.prompt;
+  typingQuestionNumber.textContent = `${currentIndex + 1}`;
+  typingScoreProgress.textContent = `全${quizQuestions.length}問`;
+  typingArtworkImage.hidden = false;
+  typingImageFallback.hidden = true;
+  typingArtworkImage.alt = `${currentIndex + 1}問目の作品画像`;
+  typingArtworkImage.src = getImageSrc(question.image);
+  typingAnswerInput.focus();
+}
+
 function renderArtworkList() {
   artworkList.innerHTML = artworks.map((artwork) => {
     return `
@@ -262,11 +316,23 @@ function gradeAnswer(question, selected) {
 }
 
 function startQuiz() {
+  currentQuizType = "choice";
+  currentTypingField = "";
   quizQuestions = shuffle(artworks);
   currentIndex = 0;
   answers = [];
   showScreen("quiz");
   renderQuestion();
+}
+
+function startTypingQuiz(field) {
+  currentQuizType = "typing";
+  currentTypingField = field;
+  quizQuestions = shuffle(artworks);
+  currentIndex = 0;
+  answers = [];
+  showScreen("typing");
+  renderTypingQuestion();
 }
 
 function handleSubmit(event) {
@@ -298,15 +364,45 @@ function handleSubmit(event) {
   }
 }
 
+function handleTypingSubmit(event) {
+  event.preventDefault();
+
+  const question = quizQuestions[currentIndex];
+  const userAnswer = typingAnswerInput.value.trim();
+  const correctAnswer = question[currentTypingField];
+  const isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
+
+  if (!userAnswer) {
+    typingWarningMessage.textContent = "答えを入力してください。";
+    return;
+  }
+
+  answers.push({
+    question,
+    selected: {
+      [currentTypingField]: userAnswer
+    },
+    result: {
+      [currentTypingField]: isCorrect
+    }
+  });
+
+  currentIndex += 1;
+  if (currentIndex < quizQuestions.length) {
+    renderTypingQuestion();
+  } else {
+    renderResult();
+  }
+}
+
 function renderMark(isCorrect) {
   return `<span class="mark ${isCorrect ? "correct" : "wrong"}">${isCorrect ? "正" : "誤"}</span>`;
 }
 
 function renderResult() {
-  const maxScore = artworks.length * 3;
-  const score = answers.reduce((sum, answer) => {
-    return sum + Object.values(answer.result).filter(Boolean).length;
-  }, 0);
+  const isTyping = currentQuizType === "typing";
+  const maxScore = isTyping ? artworks.length : artworks.length * 3;
+  const score = answers.reduce((sum, answer) => sum + Object.values(answer.result).filter(Boolean).length, 0);
   const accuracy = Math.round((score / maxScore) * 100);
 
   totalScore.textContent = `${score} / ${maxScore}点`;
@@ -314,6 +410,19 @@ function renderResult() {
 
   resultList.innerHTML = answers.map((answer, index) => {
     const { question, selected, result } = answer;
+    if (isTyping) {
+      const mode = typingModes[currentTypingField];
+      return `
+        <article class="result-card">
+          <strong>問題${index + 1}：${question.title}</strong>
+          <p class="result-detail">
+            <span>${renderMark(result[currentTypingField])} ${mode.prompt.replace("を入力", "")}：${selected[currentTypingField]}</span>
+            <span>正解：${question[currentTypingField]}</span>
+          </p>
+        </article>
+      `;
+    }
+
     return `
       <article class="result-card">
         <strong>問題${index + 1}：${question.title}</strong>
@@ -327,6 +436,18 @@ function renderResult() {
   }).join("");
 
   answerList.innerHTML = quizQuestions.map((question, index) => {
+    if (isTyping) {
+      const mode = typingModes[currentTypingField];
+      return `
+        <article class="answer-card">
+          <strong>問題${index + 1}</strong>
+          <p class="result-detail">
+            <span>${mode.prompt.replace("を入力", "")}：${question[currentTypingField]}</span>
+          </p>
+        </article>
+      `;
+    }
+
     return `
       <article class="answer-card">
         <strong>問題${index + 1}</strong>
@@ -347,11 +468,26 @@ artworkImage.addEventListener("error", () => {
   imageFallback.hidden = false;
 });
 
+typingArtworkImage.addEventListener("error", () => {
+  typingArtworkImage.hidden = true;
+  typingImageFallback.hidden = false;
+});
+
 startButton.addEventListener("click", startQuiz);
+typingStartButtons.forEach((button) => {
+  button.addEventListener("click", () => startTypingQuiz(button.dataset.field));
+});
 showListButton.addEventListener("click", () => {
   renderArtworkList();
   showScreen("list");
 });
 backToStartButton.addEventListener("click", () => showScreen("start"));
-retryButton.addEventListener("click", startQuiz);
+retryButton.addEventListener("click", () => {
+  if (currentQuizType === "typing") {
+    startTypingQuiz(currentTypingField);
+  } else {
+    startQuiz();
+  }
+});
 answerForm.addEventListener("submit", handleSubmit);
+typingAnswerForm.addEventListener("submit", handleTypingSubmit);
