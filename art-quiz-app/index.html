@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>美術定期テスト対策クイズ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="start-screen" class="screen is-active" aria-labelledby="app-title">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">中学生向け 美術テスト対策</p>
+          <h1 id="app-title">美術定期テスト対策クイズ</h1>
+          <p class="lead">
+            作品画像を見て、作品名・作者名・国名を4択で答える練習アプリです。
+            1問3点満点で、結果画面では正解と自分の回答を確認できます。
+          </p>
+        </div>
+        <button id="start-button" class="primary-button" type="button">スタート</button>
+      </div>
+    </section>
+
+    <section id="quiz-screen" class="screen" aria-labelledby="question-heading">
+      <div class="quiz-header">
+        <div>
+          <p class="eyebrow">Question</p>
+          <h2 id="question-heading">問題 <span id="question-number">1</span></h2>
+        </div>
+        <p id="score-progress" class="score-progress">全3問</p>
+      </div>
+
+      <div class="artwork-panel">
+        <div class="image-frame">
+          <img id="artwork-image" src="" alt="作品画像">
+          <div id="image-fallback" class="image-fallback" hidden>
+            画像を読み込めませんでした
+          </div>
+        </div>
+      </div>
+
+      <form id="answer-form" class="answer-form">
+        <fieldset class="choice-group">
+          <legend>作品名</legend>
+          <div id="title-options" class="choices"></div>
+        </fieldset>
+
+        <fieldset class="choice-group">
+          <legend>作者名</legend>
+          <div id="artist-options" class="choices"></div>
+        </fieldset>
+
+        <fieldset class="choice-group">
+          <legend>国名</legend>
+          <div id="country-options" class="choices"></div>
+        </fieldset>
+
+        <p id="warning-message" class="warning-message" role="alert" aria-live="polite"></p>
+        <button class="primary-button submit-button" type="submit">回答する</button>
+      </form>
+    </section>
+
+    <section id="result-screen" class="screen" aria-labelledby="result-heading">
+      <div class="result-summary">
+        <p class="eyebrow">Result</p>
+        <h2 id="result-heading">結果</h2>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span>合計点</span>
+            <strong id="total-score">0点</strong>
+          </div>
+          <div class="summary-item">
+            <span>正答率</span>
+            <strong id="accuracy-rate">0%</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-section">
+        <h3>各問題の正誤</h3>
+        <div id="result-list" class="result-list"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>正解一覧</h3>
+        <div id="answer-list" class="answer-list"></div>
+      </div>
+
+      <button id="retry-button" class="primary-button" type="button">もう一度やる</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
