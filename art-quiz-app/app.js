@@ -135,11 +135,14 @@ const extraOptions = {
 
 const screens = {
   start: document.getElementById("start-screen"),
+  list: document.getElementById("list-screen"),
   quiz: document.getElementById("quiz-screen"),
   result: document.getElementById("result-screen")
 };
 
 const startButton = document.getElementById("start-button");
+const showListButton = document.getElementById("show-list-button");
+const backToStartButton = document.getElementById("back-to-start-button");
 const retryButton = document.getElementById("retry-button");
 const answerForm = document.getElementById("answer-form");
 const questionNumber = document.getElementById("question-number");
@@ -151,6 +154,7 @@ const totalScore = document.getElementById("total-score");
 const accuracyRate = document.getElementById("accuracy-rate");
 const resultList = document.getElementById("result-list");
 const answerList = document.getElementById("answer-list");
+const artworkList = document.getElementById("artwork-list");
 const imageVersion = "20260614-jpeg";
 
 let quizQuestions = [];
@@ -169,6 +173,11 @@ function shuffle(items) {
 function showScreen(screenName) {
   Object.values(screens).forEach((screen) => screen.classList.remove("is-active"));
   screens[screenName].classList.add("is-active");
+}
+
+function getImageSrc(imagePath) {
+  const cacheBuster = window.location.protocol.startsWith("http") ? `?v=${imageVersion}` : "";
+  return `${imagePath}${cacheBuster}`;
 }
 
 function buildOptions(type, correctAnswer) {
@@ -204,7 +213,6 @@ function renderChoices(containerId, name, options) {
 
 function renderQuestion() {
   const question = quizQuestions[currentIndex];
-  const cacheBuster = window.location.protocol.startsWith("http") ? `?v=${imageVersion}` : "";
 
   warningMessage.textContent = "";
   answerForm.reset();
@@ -213,11 +221,31 @@ function renderQuestion() {
   artworkImage.hidden = false;
   imageFallback.hidden = true;
   artworkImage.alt = `${currentIndex + 1}問目の作品画像`;
-  artworkImage.src = `${question.image}${cacheBuster}`;
+  artworkImage.src = getImageSrc(question.image);
 
   renderChoices("title-options", "title", buildOptions("title", question.title));
   renderChoices("artist-options", "artist", buildOptions("artist", question.artist));
   renderChoices("country-options", "country", buildOptions("country", question.country));
+}
+
+function renderArtworkList() {
+  artworkList.innerHTML = artworks.map((artwork) => {
+    return `
+      <article class="artwork-card">
+        <div class="artwork-thumb">
+          <img src="${getImageSrc(artwork.image)}" alt="${artwork.title}" loading="lazy" decoding="async">
+        </div>
+        <div class="artwork-info">
+          <span class="artwork-number">No. ${artwork.id}</span>
+          <strong>${artwork.title}</strong>
+          <p>
+            <span>作者名：${artwork.artist}</span>
+            <span>国名：${artwork.country}</span>
+          </p>
+        </div>
+      </article>
+    `;
+  }).join("");
 }
 
 function getSelectedValue(name) {
@@ -320,5 +348,10 @@ artworkImage.addEventListener("error", () => {
 });
 
 startButton.addEventListener("click", startQuiz);
+showListButton.addEventListener("click", () => {
+  renderArtworkList();
+  showScreen("list");
+});
+backToStartButton.addEventListener("click", () => showScreen("start"));
 retryButton.addEventListener("click", startQuiz);
 answerForm.addEventListener("submit", handleSubmit);

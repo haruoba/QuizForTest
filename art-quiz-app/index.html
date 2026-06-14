@@ -18,8 +18,23 @@
             1問3点満点で、結果画面では正解と自分の回答を確認できます。
           </p>
         </div>
-        <button id="start-button" class="primary-button" type="button">スタート</button>
+        <div class="hero-actions">
+          <button id="start-button" class="primary-button" type="button">スタート</button>
+          <button id="show-list-button" class="secondary-button" type="button">問題一覧を見る</button>
+        </div>
       </div>
+    </section>
+
+    <section id="list-screen" class="screen" aria-labelledby="list-heading">
+      <div class="quiz-header">
+        <div>
+          <p class="eyebrow">Artwork List</p>
+          <h2 id="list-heading">問題一覧</h2>
+        </div>
+        <button id="back-to-start-button" class="secondary-button" type="button">戻る</button>
+      </div>
+
+      <div id="artwork-list" class="artwork-list"></div>
     </section>
 
     <section id="quiz-screen" class="screen" aria-labelledby="question-heading">
