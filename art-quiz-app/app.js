@@ -151,6 +151,7 @@ const totalScore = document.getElementById("total-score");
 const accuracyRate = document.getElementById("accuracy-rate");
 const resultList = document.getElementById("result-list");
 const answerList = document.getElementById("answer-list");
+const imageVersion = "20260614-jpeg";
 
 let quizQuestions = [];
 let currentIndex = 0;
@@ -203,6 +204,7 @@ function renderChoices(containerId, name, options) {
 
 function renderQuestion() {
   const question = quizQuestions[currentIndex];
+  const cacheBuster = window.location.protocol.startsWith("http") ? `?v=${imageVersion}` : "";
 
   warningMessage.textContent = "";
   answerForm.reset();
@@ -210,8 +212,8 @@ function renderQuestion() {
   scoreProgress.textContent = `全${quizQuestions.length}問`;
   artworkImage.hidden = false;
   imageFallback.hidden = true;
-  artworkImage.src = question.image;
   artworkImage.alt = `${currentIndex + 1}問目の作品画像`;
+  artworkImage.src = `${question.image}${cacheBuster}`;
 
   renderChoices("title-options", "title", buildOptions("title", question.title));
   renderChoices("artist-options", "artist", buildOptions("artist", question.artist));
