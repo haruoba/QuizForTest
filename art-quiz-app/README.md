@@ -2,6 +2,8 @@
 
 中学生向けの美術定期テスト対策Webアプリです。作品画像を見て、作品名・作者名・国名をそれぞれ4択で答えます。1問につき3点満点で、最後に合計点、正答率、各問題の正誤、正解一覧を確認できます。
 
+現在の問題数は18問です。
+
 React、Node.js、サーバー、データベースは使っていません。`index.html` を開くだけで動作し、GitHub Pagesでそのまま公開できます。
 
 ## ローカルでの確認方法
@@ -75,10 +77,8 @@ art-quiz-app/
 
 同梱画像は、授業用の確認に使いやすいようローカルファイルとして配置しています。公開前に、学校や授業の利用条件に合わせて画像のライセンスを確認してください。
 
-`capet.jpg` は、取得時のアクセス制限を避けるため学習用の生成画像を入れています。実際の作品画像を使う場合は、同じファイル名で差し替えると `app.js` を変更せずに使えます。
+一部の画像は、本番差し替え用の仮画像を入れています。実際の作品画像を使う場合は、`app.js` に書かれている画像ファイル名と同じ名前で `images` フォルダ内の画像を差し替えると、`app.js` を変更せずに使えます。
 
 参考:
 
 - マリー＝ガブリエル・カペ: https://en.wikipedia.org/wiki/Marie-Gabrielle_Capet
-- モナ・リザ: https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg
-- 真珠の耳飾りの少女: https://commons.wikimedia.org/wiki/File:1665_Girl_with_a_Pearl_Earring.jpg

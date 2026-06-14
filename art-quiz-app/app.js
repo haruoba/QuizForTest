@@ -8,16 +8,121 @@ const artworks = [
   },
   {
     id: 2,
-    image: "images/mona_lisa.jpg",
-    title: "モナ・リザ",
-    artist: "レオナルド・ダ・ヴィンチ",
-    country: "イタリア"
+    image: "images/schiele_self_portrait.jpg",
+    title: "ホオズキの実のある自画像",
+    artist: "エゴン・シーレ",
+    country: "オーストリア"
   },
   {
     id: 3,
-    image: "images/pearl_earring.jpg",
-    title: "真珠の耳飾りの少女",
-    artist: "ヨハネス・フェルメール",
+    image: "images/gauguin_yellow_christ.jpg",
+    title: "黄色いキリストのある自画像",
+    artist: "ポール・ゴーギャン",
+    country: "フランス"
+  },
+  {
+    id: 4,
+    image: "images/van_gogh_felt_hat.jpg",
+    title: "灰色のフェルト帽の自画像",
+    artist: "フィンセント・ファン・ゴッホ",
+    country: "オランダ"
+  },
+  {
+    id: 5,
+    image: "images/yasui_kotaro_self_portrait.jpg",
+    title: "自画像",
+    artist: "安井曽太郎",
+    country: "日本"
+  },
+  {
+    id: 6,
+    image: "images/tamara_bugatti.jpg",
+    title: "自画像（緑色のブガッティを運転するタマラ）",
+    artist: "タマラ・ド・レンピッカ",
+    country: "ポーランド"
+  },
+  {
+    id: 7,
+    image: "images/miroku_bosatsu.jpg",
+    title: "弥勒菩薩像（半跏思惟像）",
+    artist: "作者不詳",
+    country: "日本"
+  },
+  {
+    id: 8,
+    image: "images/buddha_head.jpg",
+    title: "仏頭",
+    artist: "作者不詳",
+    country: "日本"
+  },
+  {
+    id: 9,
+    image: "images/ashura.jpg",
+    title: "阿修羅像",
+    artist: "作者不詳",
+    country: "日本"
+  },
+  {
+    id: 10,
+    image: "images/todaiji_nandaimon.jpg",
+    title: "東大寺南大門",
+    artist: "作者不詳",
+    country: "日本"
+  },
+  {
+    id: 11,
+    image: "images/kongorikishi.jpg",
+    title: "金剛力士像",
+    artist: "運慶・快慶",
+    country: "日本"
+  },
+  {
+    id: 12,
+    image: "images/desperate_man.jpg",
+    title: "絶望（絶望する男）",
+    artist: "ギュスターヴ・クールベ",
+    country: "フランス"
+  },
+  {
+    id: 13,
+    image: "images/matsuda_masahira_self_portrait.jpg",
+    title: "自画像",
+    artist: "松田正平",
+    country: "日本"
+  },
+  {
+    id: 14,
+    image: "images/schiele_striped_shirt.jpg",
+    title: "ストライプのシャツを着た自画像",
+    artist: "エゴン・シーレ",
+    country: "オーストリア"
+  },
+  {
+    id: 15,
+    image: "images/migishi_setsuko_self_portrait.jpg",
+    title: "自画像",
+    artist: "三岸節子",
+    country: "日本"
+  },
+  {
+    id: 16,
+    image: "images/foujita_self_portrait.jpg",
+    title: "自画像",
+    artist: "藤田嗣治",
+    country: "日本"
+  },
+  {
+    id: 17,
+    image: "images/dubuffet_self_portrait_ii.jpg",
+    title: "自画像 II",
+    artist: "ジャン・デュビュッフェ",
+    country: "フランス"
+  },
+  {
+    id: 18,
+    image: "images/escher_hand_with_reflecting_sphere.jpg",
+    title: "写像球体を持つ手",
+    artist: "M.C.エッシャー",
     country: "オランダ"
   }
 ];
@@ -25,7 +130,7 @@ const artworks = [
 const extraOptions = {
   title: ["ひまわり", "ゲルニカ", "落穂拾い", "叫び", "笛を吹く少年", "民衆を導く自由の女神"],
   artist: ["フィンセント・ファン・ゴッホ", "パブロ・ピカソ", "ジャン＝フランソワ・ミレー", "エドヴァルド・ムンク", "エドゥアール・マネ", "ウジェーヌ・ドラクロワ"],
-  country: ["スペイン", "ノルウェー", "ドイツ", "日本", "アメリカ", "イギリス"]
+  country: ["スペイン", "ノルウェー", "ドイツ", "アメリカ", "イギリス", "イタリア"]
 };
 
 const screens = {
