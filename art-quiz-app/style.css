@@ -171,12 +171,20 @@ h3 {
   position: relative;
   display: grid;
   place-items: center;
-  height: clamp(120px, calc(100dvh - 520px), 42vh);
-  min-height: 0;
-  max-height: 42vh;
+  width: 100%;
+  max-width: 720px;
+  height: 180px;
+  padding: 26px 12px;
   overflow: hidden;
+  box-sizing: border-box;
   border-radius: 6px;
   background: #e8e1d5;
+  margin: 0 auto;
+}
+
+.image-frame.is-portrait {
+  height: 260px;
+  padding: 12px 26px;
 }
 
 .image-frame img {
@@ -188,8 +196,12 @@ h3 {
 }
 
 #typing-screen .image-frame {
-  height: clamp(150px, calc(100dvh - 380px), 54vh);
-  max-height: 54vh;
+  height: 200px;
+}
+
+#typing-screen .image-frame.is-portrait {
+  height: 300px;
+  padding: 12px 28px;
 }
 
 .image-fallback {
@@ -505,13 +517,22 @@ h3 {
   }
 
   .image-frame {
-    height: clamp(92px, calc(100dvh - 500px), 32vh);
-    max-height: 32vh;
+    height: 140px;
+    padding: 20px 10px;
+  }
+
+  .image-frame.is-portrait {
+    height: 220px;
+    padding: 10px 20px;
   }
 
   #typing-screen .image-frame {
-    height: clamp(130px, calc(100dvh - 360px), 44vh);
-    max-height: 44vh;
+    height: 160px;
+  }
+
+  #typing-screen .image-frame.is-portrait {
+    height: 240px;
+    padding: 10px 22px;
   }
 
   .choices,

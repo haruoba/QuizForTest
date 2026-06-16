@@ -212,6 +212,12 @@ function getImageSrc(imagePath) {
   return `${imagePath}${cacheBuster}`;
 }
 
+function updateFrameOrientation(imgElement, frameElement, loadedImage) {
+  const isPortrait = loadedImage.naturalHeight > loadedImage.naturalWidth;
+  frameElement.classList.toggle("is-portrait", isPortrait);
+  imgElement.classList.toggle("is-portrait", isPortrait);
+}
+
 function normalizeAnswer(value) {
   return value
     .normalize("NFKC")
@@ -403,7 +409,16 @@ function handleTypingSubmit(event) {
   const isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
 
   if (!userAnswer) {
-    typingWarningMessage.textContent = "答えを入力してください。";
+    answers.push({
+      question,
+      selected: {
+        [currentTypingField]: userAnswer
+      },
+      result: {
+        [currentTypingField]: false
+      }
+    });
+    showAnswerPopup(correctAnswer);
     return;
   }
 
@@ -503,9 +518,17 @@ artworkImage.addEventListener("error", () => {
   imageFallback.hidden = false;
 });
 
+artworkImage.addEventListener("load", () => {
+  updateFrameOrientation(artworkImage, artworkImage.parentElement, artworkImage);
+});
+
 typingArtworkImage.addEventListener("error", () => {
   typingArtworkImage.hidden = true;
   typingImageFallback.hidden = false;
+});
+
+typingArtworkImage.addEventListener("load", () => {
+  updateFrameOrientation(typingArtworkImage, typingArtworkImage.parentElement, typingArtworkImage);
 });
 
 document.addEventListener("keydown", (event) => {
