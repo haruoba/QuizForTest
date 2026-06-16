@@ -342,20 +342,17 @@ h3 {
   width: min(100%, 480px);
   border-radius: 8px;
   border: 1px solid var(--line);
-  padding: 24px;
+  padding: 28px;
   background: var(--paper);
   box-shadow: var(--shadow);
 }
 
-.answer-popup-box h2 {
-  font-size: 1.8rem;
-}
-
 .answer-popup-text {
-  margin: 16px 0 0;
-  font-size: 1.2rem;
+  margin: 0;
+  font-size: clamp(1.5rem, 5vw, 2.4rem);
   font-weight: 800;
-  line-height: 1.6;
+  line-height: 1.45;
+  text-align: center;
 }
 
 .choices {

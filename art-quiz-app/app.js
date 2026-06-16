@@ -220,16 +220,6 @@ function normalizeAnswer(value) {
     .toLowerCase();
 }
 
-function insertQuestionRandomly(question) {
-  const nextIndex = currentIndex + 1;
-  const remainingCount = quizQuestions.length - nextIndex;
-  const insertIndex = remainingCount > 0
-    ? nextIndex + Math.floor(Math.random() * remainingCount)
-    : nextIndex;
-
-  quizQuestions.splice(insertIndex, 0, question);
-}
-
 function buildOptions(type, correctAnswer) {
   const pool = [
     ...artworks.map((artwork) => artwork[type]),
@@ -303,8 +293,8 @@ function renderTypingQuestion() {
   typingAnswerInput.focus();
 }
 
-function showAnswerPopup(correctAnswer, question) {
-  pendingWrongQuestion = question;
+function showAnswerPopup(correctAnswer) {
+  pendingWrongQuestion = quizQuestions[currentIndex];
   answerPopupText.textContent = correctAnswer;
   answerPopup.hidden = false;
 }
@@ -314,16 +304,10 @@ function closeAnswerPopup() {
     return;
   }
 
-  insertQuestionRandomly(pendingWrongQuestion);
   pendingWrongQuestion = null;
   answerPopup.hidden = true;
-  currentIndex += 1;
-
-  if (currentIndex < quizQuestions.length) {
-    renderTypingQuestion();
-  } else {
-    renderResult();
-  }
+  typingAnswerInput.value = "";
+  typingAnswerInput.focus();
 }
 
 function renderArtworkList() {
@@ -423,20 +407,20 @@ function handleTypingSubmit(event) {
     return;
   }
 
+  if (!isCorrect) {
+    showAnswerPopup(correctAnswer);
+    return;
+  }
+
   answers.push({
     question,
     selected: {
       [currentTypingField]: userAnswer
     },
     result: {
-      [currentTypingField]: isCorrect
+      [currentTypingField]: true
     }
   });
-
-  if (!isCorrect) {
-    showAnswerPopup(correctAnswer, question);
-    return;
-  }
 
   currentIndex += 1;
   if (currentIndex < quizQuestions.length) {
