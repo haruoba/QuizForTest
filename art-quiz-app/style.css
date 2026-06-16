@@ -173,15 +173,18 @@ h3 {
   place-items: center;
   width: 100%;
   max-width: 720px;
-  height: 320px;
+  height: 180px;
+  padding: 26px 12px;
   overflow: hidden;
+  box-sizing: border-box;
   border-radius: 6px;
   background: #e8e1d5;
   margin: 0 auto;
 }
 
 .image-frame.is-portrait {
-  height: 520px;
+  height: 260px;
+  padding: 12px 26px;
 }
 
 .image-frame img {
@@ -193,11 +196,12 @@ h3 {
 }
 
 #typing-screen .image-frame {
-  height: 360px;
+  height: 200px;
 }
 
 #typing-screen .image-frame.is-portrait {
-  height: 600px;
+  height: 300px;
+  padding: 12px 28px;
 }
 
 .image-fallback {
@@ -513,19 +517,22 @@ h3 {
   }
 
   .image-frame {
-    height: 220px;
+    height: 140px;
+    padding: 20px 10px;
   }
 
   .image-frame.is-portrait {
-    height: 360px;
+    height: 220px;
+    padding: 10px 20px;
   }
 
   #typing-screen .image-frame {
-    height: 260px;
+    height: 160px;
   }
 
   #typing-screen .image-frame.is-portrait {
-    height: 420px;
+    height: 240px;
+    padding: 10px 22px;
   }
 
   .choices,

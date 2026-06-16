@@ -409,7 +409,16 @@ function handleTypingSubmit(event) {
   const isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
 
   if (!userAnswer) {
-    typingWarningMessage.textContent = "答えを入力してください。";
+    answers.push({
+      question,
+      selected: {
+        [currentTypingField]: userAnswer
+      },
+      result: {
+        [currentTypingField]: false
+      }
+    });
+    showAnswerPopup(correctAnswer);
     return;
   }
 
