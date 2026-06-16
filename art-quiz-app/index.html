@@ -95,6 +95,7 @@
             画像を読み込めませんでした
           </div>
         </div>
+        <div id="typing-title-display" class="typing-title-display"></div>
       </div>
 
       <form id="typing-answer-form" class="answer-form">
@@ -103,7 +104,6 @@
           <input id="typing-answer-input" class="typing-input" type="text" autocomplete="off">
         </label>
         <p id="typing-warning-message" class="warning-message" role="alert" aria-live="polite"></p>
-        <button class="primary-button submit-button" type="submit">回答する</button>
       </form>
     </section>
 
@@ -136,6 +136,14 @@
       <button id="retry-button" class="primary-button" type="button">もう一度やる</button>
     </section>
   </main>
+
+  <div id="answer-popup" class="answer-popup" role="dialog" aria-modal="true" aria-labelledby="answer-popup-title" hidden>
+    <div class="answer-popup-box">
+      <p class="eyebrow">Incorrect</p>
+      <h2 id="answer-popup-title">正解</h2>
+      <p id="answer-popup-text" class="answer-popup-text"></p>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

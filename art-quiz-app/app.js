@@ -157,6 +157,7 @@ const typingQuestionNumber = document.getElementById("typing-question-number");
 const typingScoreProgress = document.getElementById("typing-score-progress");
 const typingArtworkImage = document.getElementById("typing-artwork-image");
 const typingImageFallback = document.getElementById("typing-image-fallback");
+const typingTitleDisplay = document.getElementById("typing-title-display");
 const typingAnswerLabel = document.getElementById("typing-answer-label");
 const typingAnswerInput = document.getElementById("typing-answer-input");
 const warningMessage = document.getElementById("warning-message");
@@ -166,6 +167,8 @@ const accuracyRate = document.getElementById("accuracy-rate");
 const resultList = document.getElementById("result-list");
 const answerList = document.getElementById("answer-list");
 const artworkList = document.getElementById("artwork-list");
+const answerPopup = document.getElementById("answer-popup");
+const answerPopupText = document.getElementById("answer-popup-text");
 const imageVersion = "20260614-jpeg";
 
 let quizQuestions = [];
@@ -173,6 +176,7 @@ let currentIndex = 0;
 let answers = [];
 let currentQuizType = "choice";
 let currentTypingField = "";
+let pendingWrongQuestion = null;
 
 const typingModes = {
   artist: {
@@ -214,6 +218,16 @@ function normalizeAnswer(value) {
     .replace(/\s+/g, "")
     .trim()
     .toLowerCase();
+}
+
+function insertQuestionRandomly(question) {
+  const nextIndex = currentIndex + 1;
+  const remainingCount = quizQuestions.length - nextIndex;
+  const insertIndex = remainingCount > 0
+    ? nextIndex + Math.floor(Math.random() * remainingCount)
+    : nextIndex;
+
+  quizQuestions.splice(insertIndex, 0, question);
 }
 
 function buildOptions(type, correctAnswer) {
@@ -277,9 +291,39 @@ function renderTypingQuestion() {
   typingScoreProgress.textContent = `全${quizQuestions.length}問`;
   typingArtworkImage.hidden = false;
   typingImageFallback.hidden = true;
+  if (currentTypingField === "title") {
+    typingTitleDisplay.hidden = true;
+    typingTitleDisplay.textContent = "";
+  } else {
+    typingTitleDisplay.hidden = false;
+    typingTitleDisplay.textContent = `作品名：${question.title}`;
+  }
   typingArtworkImage.alt = `${currentIndex + 1}問目の作品画像`;
   typingArtworkImage.src = getImageSrc(question.image);
   typingAnswerInput.focus();
+}
+
+function showAnswerPopup(correctAnswer, question) {
+  pendingWrongQuestion = question;
+  answerPopupText.textContent = correctAnswer;
+  answerPopup.hidden = false;
+}
+
+function closeAnswerPopup() {
+  if (!pendingWrongQuestion) {
+    return;
+  }
+
+  insertQuestionRandomly(pendingWrongQuestion);
+  pendingWrongQuestion = null;
+  answerPopup.hidden = true;
+  currentIndex += 1;
+
+  if (currentIndex < quizQuestions.length) {
+    renderTypingQuestion();
+  } else {
+    renderResult();
+  }
 }
 
 function renderArtworkList() {
@@ -321,6 +365,7 @@ function startQuiz() {
   quizQuestions = shuffle(artworks);
   currentIndex = 0;
   answers = [];
+  pendingWrongQuestion = null;
   showScreen("quiz");
   renderQuestion();
 }
@@ -331,6 +376,7 @@ function startTypingQuiz(field) {
   quizQuestions = shuffle(artworks);
   currentIndex = 0;
   answers = [];
+  pendingWrongQuestion = null;
   showScreen("typing");
   renderTypingQuestion();
 }
@@ -386,6 +432,11 @@ function handleTypingSubmit(event) {
       [currentTypingField]: isCorrect
     }
   });
+
+  if (!isCorrect) {
+    showAnswerPopup(correctAnswer, question);
+    return;
+  }
 
   currentIndex += 1;
   if (currentIndex < quizQuestions.length) {
@@ -471,6 +522,13 @@ artworkImage.addEventListener("error", () => {
 typingArtworkImage.addEventListener("error", () => {
   typingArtworkImage.hidden = true;
   typingImageFallback.hidden = false;
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!answerPopup.hidden && event.key === "Enter") {
+    event.preventDefault();
+    closeAnswerPopup();
+  }
 });
 
 startButton.addEventListener("click", startQuiz);
