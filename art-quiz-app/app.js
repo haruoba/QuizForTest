@@ -212,6 +212,12 @@ function getImageSrc(imagePath) {
   return `${imagePath}${cacheBuster}`;
 }
 
+function updateFrameOrientation(imgElement, frameElement, loadedImage) {
+  const isPortrait = loadedImage.naturalHeight > loadedImage.naturalWidth;
+  frameElement.classList.toggle("is-portrait", isPortrait);
+  imgElement.classList.toggle("is-portrait", isPortrait);
+}
+
 function normalizeAnswer(value) {
   return value
     .normalize("NFKC")
@@ -503,9 +509,17 @@ artworkImage.addEventListener("error", () => {
   imageFallback.hidden = false;
 });
 
+artworkImage.addEventListener("load", () => {
+  updateFrameOrientation(artworkImage, artworkImage.parentElement, artworkImage);
+});
+
 typingArtworkImage.addEventListener("error", () => {
   typingArtworkImage.hidden = true;
   typingImageFallback.hidden = false;
+});
+
+typingArtworkImage.addEventListener("load", () => {
+  updateFrameOrientation(typingArtworkImage, typingArtworkImage.parentElement, typingArtworkImage);
 });
 
 document.addEventListener("keydown", (event) => {
